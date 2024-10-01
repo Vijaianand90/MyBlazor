@@ -1,0 +1,64 @@
+﻿
+@page "/todo"
+
+<PageTitle>To Do</PageTitle>
+
+<h3>To Do</h3>
+
+<div class="row">
+    <div class="col-sm-3"> </div>
+    <div class="col-sm-3">
+        <input type="text" @bind="newTodo" placeholder="Enter a new to-do item" />
+        </div>
+    <div class="col-sm-3">
+        <button @onclick="AddTodo">Add</button>
+    </div>
+    <div class="col-sm-3"> </div>
+</div>
+<div class="row">
+    <div class="col-sm-3"> </div>
+    <div class="col-sm-6"> 
+        <ul>
+            @foreach (var todo in todos)
+            {
+                <li>
+                    <input type="checkbox" @bind="todo.IsCompleted" />
+                    <span style="text-decoration: @(todo.IsCompleted ? "line-through" : "none")">
+                        @todo.Name
+                    </span>
+                    <button @onclick="() => DeleteTodo(todo)">Delete</button>
+                </li>
+            }
+        </ul>
+    </div>
+    <div class="col-sm-3"> </div>
+</div>
+
+@code {
+
+    private string newTodo = string.Empty;
+
+    private List<TodoItem> todos = new List<TodoItem>();
+
+
+    public class TodoItem
+    {
+        public string Name { get; set; } = string.Empty;
+        public bool IsCompleted { get; set; }
+    }
+
+    private void AddTodo()
+    {
+        if (!string.IsNullOrWhiteSpace(newTodo))
+        {
+            todos.Add(new TodoItem { Name = newTodo });
+            newTodo = string.Empty; 
+        }
+    }
+
+    private void DeleteTodo(TodoItem todo)
+    {
+        todos.Remove(todo);
+    }
+
+}
